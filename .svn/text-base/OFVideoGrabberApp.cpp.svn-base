@@ -1,0 +1,44 @@
+/*
+ *  OFVideoGrabberApp.cpp
+ *  OFVideoGrabber
+ *
+ *  Created by Nabil Alsharif on 2/22/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "OFVideoGrabberApp.h"
+#include "filters.h"
+
+void OFVideoGrabberApp::setup(){
+	camWidth = 400;
+	camHeight = 320;
+	
+	videoGrabber.initGrabber(camWidth, camHeight);
+    filterBuffer = new unsigned char[camWidth*camHeight*3];
+    filteredTexture.allocate(camWidth, camHeight, GL_LUMINANCE);
+}
+
+void OFVideoGrabberApp::update(){
+	unsigned char *buffer = (unsigned char*)malloc(camWidth*camHeight);
+	ofBackground(80, 80, 80);
+	videoGrabber.grabFrame();
+    if(videoGrabber.isFrameNew()){
+        unsigned char* pixels = videoGrabber.getPixels();
+		convert_to_greyscale(pixels, camWidth, camHeight, buffer);
+		edge_detect(buffer, camWidth, camHeight, filterBuffer);
+        filteredTexture.loadData(filterBuffer, camWidth, camHeight, GL_LUMINANCE);
+    }
+	free(buffer);
+}
+
+void OFVideoGrabberApp::draw(){
+	ofSetColor(0xffffff);
+	videoGrabber.draw(80, 80);
+    filteredTexture.draw(100+camWidth,80, camWidth, camHeight);
+}
+
+void OFVideoGrabberApp::exit(){ 
+    delete filterBuffer;
+}
+

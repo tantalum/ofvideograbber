@@ -1,0 +1,31 @@
+/*
+ *  OFVideoGrabberApp.h
+ *  OFVideoGrabber
+ *
+ *  Created by Nabil Alsharif on 2/22/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#ifndef _OF_VIDEO_GRABBER_APP
+#define _OF_VIDEO_GRABBER_APP
+
+#include "ofMain.h"
+#include "ofAddons.h"
+
+class OFVideoGrabberApp : public ofSimpleApp{
+	
+public:
+	void setup();
+	void update();
+	void draw();
+	void exit();
+    
+	ofVideoGrabber videoGrabber;
+    ofTexture filteredTexture;
+    unsigned char* filterBuffer;
+	int camWidth, camHeight;
+};
+
+#endif
+

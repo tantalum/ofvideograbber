@@ -1,0 +1,63 @@
+/*
+ *  filters.c
+ *  OFVideoGrabber
+ *
+ *  Created by Nabil Alsharif on 3/15/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "filters.h"
+
+void convert_to_greyscale(unsigned char* pixels, int width, int height, unsigned char* buffer){
+	for(int i = 0; i < width*height; i++){
+		int j = i*3;
+		unsigned int sum = (unsigned int)(pixels[j] + pixels[j+1] + pixels[j+2]);
+		buffer[i] = (unsigned char)(sum/3);
+	}
+}
+
+/*
+ * Algorithm thanks to: http://www.pages.drexel.edu/~weg22/edge.html
+ */
+void edge_detect(unsigned char* pixels, int width, int height, unsigned char* buffer){
+	unsigned char GX[3][3];
+	unsigned char GY[3][3];
+	/* 3x3 GX Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
+	GX[0][0] = -1; GX[0][1] = 0; GX[0][2] = 1;
+	GX[1][0] = -2; GX[1][1] = 0; GX[1][2] = 2;
+	GX[2][0] = -1; GX[2][1] = 0; GX[2][2] = 1;
+	
+	/* 3x3 GY Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
+	GY[0][0] =  1; GY[0][1] =  2; GY[0][2] =  1;
+	GY[1][0] =  0; GY[1][1] =  0; GY[1][2] =  0;
+	GY[2][0] = -1; GY[2][1] = -2; GY[2][2] = -1;
+	
+    int x, y;
+    long sumX, sumY, sum;
+	int i, j;
+    for(y=0; y < height; y++){
+		for(x=0; x < width; x++){
+			sumX = 0;
+			sumY = 0;
+			if(y==0  || y == (width -1)){
+				sum = 0;
+			}else if(x == 0 || (x == width - 1)){
+				sum = 0;
+			}else{
+				for(i=-1; i<=1;i++){
+					for(j=-1; j<=1; j++){
+						sumX = sumX + (long)( (*(pixels + x + i + (y+j)*width)) + GX[i+1][j+1]);
+					}												
+				}
+				for(i=-1; i<=1; i++){
+					for(j=0; j<=1; j++){
+						sumY = sumY + (long) ( (*(pixels + x + i + (y+j)*width)) * GY[i+1][j+1]);
+					}
+				}
+				sum = abs(sumX)+abs(sumY);
+			}
+			buffer[x+(y*width)] = (char)sum;
+		}
+	}
+}
