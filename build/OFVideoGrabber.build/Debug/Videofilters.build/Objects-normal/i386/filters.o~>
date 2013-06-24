@@ -1,9 +1,0 @@
-In file included from /Users/Nabil/Projects/OFVideoGrabber/filters.h:16,
-                 from /Users/Nabil/Projects/OFVideoGrabber/filters.c:1:
-/Users/Nabil/Projects/OFVideoGrabber/filters.c: In function 'edge_detect':
-/Users/Nabil/Projects/OFVideoGrabber/filters.c:57: warning: implicit declaration of function 'abs'
-/Users/Nabil/Projects/OFVideoGrabber/filters.c: At top level:
-/Users/Nabil/Projects/OFVideoGrabber/filters.c:3: error: redefinition of 'convert_to_greyscale'
-/Users/Nabil/Projects/OFVideoGrabber/filters.c:3: error: previous definition of 'convert_to_greyscale' was here
-/Users/Nabil/Projects/OFVideoGrabber/filters.c:17: error: redefinition of 'edge_detect'
-/Users/Nabil/Projects/OFVideoGrabber/filters.c:17: error: previous definition of 'edge_detect' was here
